@@ -1,0 +1,113 @@
+{% extends 'salon/base.html' %}
+
+{% block title %}
+Главная страница
+{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+    <h1 class="display-4">Добро пожаловать в Beauty Salon!</h1>
+    <p class="lead">Лучшие мастера и отличные услуги для вас.</p>
+    <a class="btn btn-primary btn-lg" href="#" role="button">Записаться</a>
+</div>
+<div class="container mt-5">
+    <!-- Наши мастера -->
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">Наши мастера</h2>
+        </div>
+        {% for master in masters %}
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <img src="{{ master.photo.url }}" class="card-img-top" alt="{{ master.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ master.name }}</h5>
+                    <p class="card-text">{{ master.title }}</p>
+                    <a href="{% url 'master_detail' master.id %}" class="btn btn-primary">Подробнее</a>
+                    <a href="{% url 'booking' master.id %}" class="btn btn-success mt-2">Записаться</a>
+                    <!-- Кнопка записи -->
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- Услуги салона
+    <div class="services-section">
+        <h2>Наши услуги</h2>
+        <ul>
+            {% for service in services %}
+            <li>{{ service.name }} - {{ service.price }} руб.</li>
+            {% endfor %}
+        </ul>
+    </div>-->
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">Наше портфолио</h2>
+        </div>
+        {% for portfolio in portfolios %}
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <img src="{{ portfolio.photo.url }}" class="card-img-top" alt="{{ portfolio.description }}">
+                <div class="card-body">
+                    <p class="card-text">{{ portfolio.description }}</p>
+                    <p class="text-muted">Мастер: {{ portfolio.master.name }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Отзывы клиентов -->
+    <div class="reviews-section">
+        <h2>Отзывы клиентов</h2>
+        <div class="container mt-5">
+            <h2 class="text-center">Отзывы</h2>
+            <div id="reviewCarousel" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    {% for review in reviews %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <div class="d-flex flex-column align-items-center">
+                            <h5>{{ review.master.name }}</h5>
+                            <p class="text-muted">Рейтинг: {{ review.rating }}</p>
+                            <p>{{ review.text }}</p>
+                            <p class="font-italic">{{ review.date|date:"d.m.Y" }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <a class="carousel-control-prev" href="#reviewCarousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#reviewCarousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Блок с описанием салона -->
+        <div class="col-md-6">
+            <h2>О салоне</h2>
+            <p>
+                Наш салон предоставляет широкий спектр услуг, включая парикмахерские услуги, маникюр, педикюр и уход
+                за
+                лицом.
+                Наши профессиональные мастера имеют многолетний опыт работы и помогут вам создать идеальный образ.
+            </p>
+        </div>
+
+        <!-- Блок с режимом работы -->
+        <div class="col-md-6">
+            <h2>Режим работы</h2>
+            <p><strong>Понедельник - Пятница:</strong> 09:00 - 20:00</p>
+            <p><strong>Суббота:</strong> 10:00 - 18:00</p>
+            <p><strong>Воскресенье:</strong> выходной</p>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'salon/base.html' %}
+{% load custom_filters %}  <!-- Подключение созданных фильтров -->
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Прайс-лист</h1>
+
+    <!-- Перебор всех категорий -->
+    {% for category in categories %}
+    <div class="category-section">
+        <h2>{{ category.name }}</h2>
+
+        <!-- Таблица услуг в категории -->
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Услуга</th>
+                    <th>Время выполнения</th>
+                    <th>Цена</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for service in category.services.all %}
+                <tr>
+                    <td>{{ service.name }}</td>
+                    <td>{{ service.duration|duration_format }}</td>  <!-- Применение фильтра -->
+                    <td>{{ service.price }} ₽</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

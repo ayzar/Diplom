@@ -1,0 +1,22 @@
+{% extends 'salon/base.html' %}
+
+{% block title %}Профиль{% endblock %}
+
+{% block content %}
+<h1>Личный кабинет</h1>
+{% if client %}
+<p>Имя: {{ client.user.first_name }}</p>
+<p>Фамилия: {{ client.user.last_name }}</p>
+<p>Email: {{ client.user.email }}</p>
+<p>Телефон: {{ client.phone }}</p>
+{% else %}
+<p>Профиль не найден.</p>
+
+{% endif %}
+<div>
+    <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Выйти</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+<div class="master-detail">
+    <h1>{{ master.name }} - {{ master.title }}</h1>
+    <img src="{{ master.photo.url }}" alt="{{ master.name }}">
+
+    <h3>Услуги мастера</h3>
+    <ul>
+        {% for service in master.services.all %}
+        <li>{{ service.name }} - {{ service.price }} руб. (длительность: {{ service.duration }})</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'home' %}" class="btn btn-primary">Вернуться на главную</a>
+</div>
