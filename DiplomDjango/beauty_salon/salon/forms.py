@@ -2,8 +2,9 @@ from django import forms
 import re
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from .models import Client, Booking
-
+from .models import Client, Booking, Service, Master
+from django.utils import timezone
+from django.forms.widgets import DateInput
 
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=150)
@@ -63,12 +64,36 @@ class RegistrationForm(forms.ModelForm):
             raise ValidationError('Неверный формат телефона. Используйте формат: +7(XXX)XXX-XX-XX.')
         return phone
 
-
 class BookingForm(forms.ModelForm):
+    master = forms.ModelChoiceField(queryset=Master.objects.all(), label='Выберите мастера')
+
     class Meta:
         model = Booking
-        fields = ['master', 'service', 'datetime']
+        fields = ['datetime', 'service', 'master']  # Добавлен выбор мастера
+        widgets = {
+            'datetime': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        }
 
-    def __init__(self, *args, **kwargs):
-        super(BookingForm, self).__init__(*args, **kwargs)
-        self.fields['datetime'].widget = forms.DateTimeInput(attrs={'type': 'datetime-local'})
+    def clean_datetime(self):
+        datetime = self.cleaned_data.get('datetime')
+        if datetime < timezone.now():
+            raise ValidationError('Выберите дату и время в будущем.')
+        return datetime
+
+    def clean(self):
+        cleaned_data = super().clean()
+        master = cleaned_data.get('master')
+        datetime = cleaned_data.get('datetime')
+
+        # Проверка на занятость мастера
+        if master and datetime:
+            overlapping_bookings = Booking.objects.filter(master=master, datetime=datetime)
+            if overlapping_bookings.exists():
+                raise ValidationError('Этот мастер занят в выбранное время.')
+
+        return cleaned_data
+
+class TimeSlotGenerationForm(forms.Form):
+    start_date = forms.DateTimeField(label='Start Date', widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}))
+    end_date = forms.DateTimeField(label='End Date', widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}))
+

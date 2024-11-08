@@ -1,8 +1,8 @@
-from django import template
 import datetime
 
-register = template.Library()
+from django import template
 
+register = template.Library()
 
 @register.filter
 def duration_format(value):
@@ -19,9 +19,3 @@ def duration_format(value):
         else:
             return f'{minutes} мин'
     return value
-
-register = template.Library()
-
-@register.filter
-def add_class(field, css_class):
-    return field.as_widget(attrs={"class": css_class})

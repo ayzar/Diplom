@@ -1,13 +1,13 @@
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Beauty Salon{% endblock %}</title>
 
-    <!-- Подключение Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Подключение Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
 
     <!-- Подключение кастомных стилей -->
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
@@ -15,16 +15,9 @@
 <body>
 <!-- Шапка -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Beauty Salon</a>
+    <a class="navbar-brand" href="{% url 'home' %}"><img class="logo" src="{% static 'img/logo.png' %}"></a>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                {% if user.is_authenticated %}
-                <a href="{% url 'book_service' %}" class="btn btn-primary">Записаться на услугу</a>
-                {% else %}
-                <a href="{% url 'login' %}" class="btn btn-warning">Пожалуйста, войдите или зарегистрируйтесь</a>
-                {% endif %}
-            </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'home' %}">Главная</a>
             </li>
@@ -38,7 +31,13 @@
                 <a class="nav-link" href="{% url 'login' %}">Личный кабинет</a>
                 {% endif %}
             </li>
-
+            <li class="nav-item">
+                {% if user.is_authenticated %}
+                <a href="{% url 'book_service' %}" class="btn btn-primary">Записаться на услугу</a>
+                {% else %}
+                <a href="{% url 'login' %}" class="btn btn-warning">Пожалуйста, войдите или зарегистрируйтесь</a>
+                {% endif %}
+            </li>
         </ul>
     </div>
 </nav>
@@ -54,10 +53,11 @@
 <footer class="footer bg-light text-center py-3 mt-5">
     <p>&copy; 2024 Beauty Salon. Все права защищены.</p>
 </footer>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<!-- Подключение Bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{% static 'js/main.js' %}"></script>
 
-<!-- Подключение Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

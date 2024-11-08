@@ -1,0 +1,11 @@
+{% extends "admin/base.html" %}
+{% block content %}
+<h1>Генерация слотов для мастера</h1>
+{% load widget_tweaks %}
+<h1>Generate Time Slots</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" name="apply">Generate Slots</button>
+    </form>
+{% endblock %}

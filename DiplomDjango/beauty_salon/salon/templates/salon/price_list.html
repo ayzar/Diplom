@@ -23,13 +23,15 @@
                 {% for service in category.services.all %}
                 <tr>
                     <td>{{ service.name }}</td>
-                    <td>{{ service.duration|duration_format }}</td>  <!-- Применение фильтра -->
+                    <td>{{ service.duration|duration_format }}</td>  <!-- Применение фильтра для форматирования времени -->
                     <td>{{ service.price }} ₽</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
+    {% empty %}
+        <p>Нет доступных услуг в этой категории.</p>  <!-- Сообщение, если нет услуг -->
     {% endfor %}
 </div>
 {% endblock %}

@@ -5,17 +5,21 @@
 {% endblock %}
 
 {% block content %}
-<div class="jumbotron">
-    <h1 class="display-4">Добро пожаловать в Beauty Salon!</h1>
-    <p class="lead">Лучшие мастера и отличные услуги для вас.</p>
-    <a class="btn btn-primary btn-lg" href="#" role="button">Записаться</a>
+<!-- Jumbotron секция -->
+<div class="jumbotron custom-jumbotron">
+    <div class="overlay">
+        <h1 class="display-4">Добро пожаловать в Beauty Salon!</h1>
+        <p class="lead">Лучшие мастера и отличные услуги для вас.</p>
+        <a class="btn btn-light btn-lg" role="button"  href="{% url 'book_service' %}" >Записаться </a>
+
+    </div>
 </div>
-<div class="container mt-5">
-    <!-- Наши мастера -->
+
+
+<!-- Секция с нашими мастерами -->
+<div class="container mt-5  bg-dark text-white py-5">
+    <h2 class="mb-4">Наши мастера</h2>
     <div class="row">
-        <div class="col-12">
-            <h2 class="mb-4">Наши мастера</h2>
-        </div>
         {% for master in masters %}
         <div class="col-md-3">
             <div class="card mb-4">
@@ -24,26 +28,17 @@
                     <h5 class="card-title">{{ master.name }}</h5>
                     <p class="card-text">{{ master.title }}</p>
                     <a href="{% url 'master_detail' master.id %}" class="btn btn-primary">Подробнее</a>
-                    <a href="{% url 'booking' master.id %}" class="btn btn-success mt-2">Записаться</a>
-                    <!-- Кнопка записи -->
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
-    <!-- Услуги салона
-    <div class="services-section">
-        <h2>Наши услуги</h2>
-        <ul>
-            {% for service in services %}
-            <li>{{ service.name }} - {{ service.price }} руб.</li>
-            {% endfor %}
-        </ul>
-    </div>-->
+</div>
+
+<!-- Секция с портфолио -->
+<div class="container mt-5 bg-light  py-5">
+    <h2 class="mb-4">Наше портфолио</h2>
     <div class="row">
-        <div class="col-12">
-            <h2 class="mb-4">Наше портфолио</h2>
-        </div>
         {% for portfolio in portfolios %}
         <div class="col-md-4">
             <div class="card mb-4">
@@ -56,39 +51,38 @@
         </div>
         {% endfor %}
     </div>
+</div>
 
-    <!-- Отзывы клиентов -->
-    <div class="reviews-section">
-        <h2>Отзывы клиентов</h2>
-        <div class="container mt-5">
-            <h2 class="text-center">Отзывы</h2>
-            <div id="reviewCarousel" class="carousel slide" data-ride="carousel">
-                <div class="carousel-inner">
-                    {% for review in reviews %}
-                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                        <div class="d-flex flex-column align-items-center">
-                            <h5>{{ review.master.name }}</h5>
-                            <p class="text-muted">Рейтинг: {{ review.rating }}</p>
-                            <p>{{ review.text }}</p>
-                            <p class="font-italic">{{ review.date|date:"d.m.Y" }}</p>
-                        </div>
-                    </div>
-                    {% endfor %}
+<!-- Секция с отзывами -->
+<div class="container mt-5  py-5">
+    <h2 class="text-center mb-4">Отзывы клиентов</h2>
+    <div id="reviewCarousel" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            {% for review in reviews %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <div class="d-flex flex-column align-items-center">
+                    <h5>{{ review.master.name }}</h5>
+                    <p class="text-muted">Рейтинг: {{ review.rating }}</p>
+                    <p>{{ review.text }}</p>
+                    <p class="font-italic">{{ review.date|date:"d.m.Y" }}</p>
                 </div>
-                <a class="carousel-control-prev" href="#reviewCarousel" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#reviewCarousel" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
             </div>
+            {% endfor %}
         </div>
+        <a class="carousel-control-prev" href="#reviewCarousel" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#reviewCarousel" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
     </div>
+</div>
 
+<!-- Секция с описанием салона -->
+<div class="container mt-5 bg-light py-5">
     <div class="row">
-        <!-- Блок с описанием салона -->
         <div class="col-md-6">
             <h2>О салоне</h2>
             <p>
@@ -99,7 +93,7 @@
             </p>
         </div>
 
-        <!-- Блок с режимом работы -->
+        <!-- Секция с режимом работы -->
         <div class="col-md-6">
             <h2>Режим работы</h2>
             <p><strong>Понедельник - Пятница:</strong> 09:00 - 20:00</p>
@@ -108,6 +102,5 @@
         </div>
     </div>
 </div>
-
 
 {% endblock %}

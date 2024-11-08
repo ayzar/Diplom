@@ -1,14 +1,38 @@
 {% extends 'salon/base.html' %}
 
-{% block title %}Запись на услугу{% endblock %}
+{% block title %}
+Бронирование услуг
+{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2 class="text-center">Запись на услугу</h2>
-    <form method="POST" class="mt-4">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary btn-block">Записаться</button>
-    </form>
-</div>
+<form id="booking-form">
+    <h3>Выберите категорию:</h3>
+    <div id="categories-list">
+        {% for category in categories %}
+            <label>
+                <input type="radio" name="category" value="{{ category.id }}"> {{ category.name }}
+            </label><br>
+        {% endfor %}
+    </div>
+
+    <div id="services-container" style="display:none;">
+        <h3>Выберите услугу:</h3>
+        <div id="services-list"></div>
+    </div>
+
+    <div id="masters-container" style="display:none;">
+        <h3>Выберите мастера:</h3>
+        <div id="masters-list"></div>
+    </div>
+
+    <div id="time-slots-container" style="display:none;">
+        <h3>Выберите время:</h3>
+        <div id="time-slots-list"></div>
+    </div>
+    <div id="booking-button-container" style="display:none;">
+        <button type="submit" class="btn btn-success">Забронировать</button>
+    </div>
+
+
+</form>
 {% endblock %}
