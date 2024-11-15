@@ -1,13 +1,114 @@
-<div class="master-detail">
-    <h1>{{ master.name }} - {{ master.title }}</h1>
-    <img src="{{ master.photo.url }}" alt="{{ master.name }}">
+{% extends 'salon/base.html' %}
 
-    <h3>Услуги мастера</h3>
-    <ul>
-        {% for service in master.services.all %}
-        <li>{{ service.name }} - {{ service.price }} руб. (длительность: {{ service.duration }})</li>
-        {% endfor %}
-    </ul>
+{% block title %}
+{{ master.title }} {{ master.name }}
+{% endblock %}
 
-    <a href="{% url 'home' %}" class="btn btn-primary">Вернуться на главную</a>
+{% block content %}
+
+
+<div class="container mt-5">
+    <!-- Информация о мастере -->
+    <div class="row">
+        <div class="col-md-4">
+            <img src="{{ master.photo.url }}" alt="{{ master.name }}" class="img-fluid rounded-circle">
+        </div>
+        <div class="col-md-8">
+            <h2>{{ master.name }}</h2>
+            <p><strong>Специализация:</strong> {{ master.specialization }}</p>
+            <p><strong>Опыт:</strong> {{ master.experience }} лет</p>
+            <p><strong>Описание:</strong> {{ master.description }}</p>
+            <p><strong>Рейтинг:</strong> {{ master.rating }} / 5</p>
+            <a href="#booking" class="btn btn-primary">Записаться к мастеру</a>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Услуги мастера -->
+    <div class="row mt-4">
+        <h3>Услуги</h3>
+        <div class="col-md-12">
+            <ul class="list-group">
+                {% for service in master.services.all %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ service.name }} ({{ service.formatted_duration }})
+                    <span class="badge bg-primary rounded-pill">{{ service.price }} ₽</span>
+                </li>
+                {% empty %}
+                <li class="list-group-item">У этого мастера пока нет доступных услуг.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Портфолио мастера -->
+    <div class="row mt-4">
+        <h3>Портфолио</h3>
+        <div class="col-md-12">
+            <div class="row">
+                {% for portfolio in master.portfolios.all %}
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <img src="{{ portfolio.photo.url }}" class="card-img-top" alt="{{ portfolio.description }}">
+                        <div class="card-body">
+                            <p class="card-text">{{ portfolio.description }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p>Портфолио мастера пока пусто.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Отзывы -->
+    <div class="row mt-4">
+        <h3>Отзывы клиентов</h3>
+        <div class="col-md-12">
+            <ul class="list-group">
+                {% for review in master.reviews.all %}
+                <li class="list-group-item">
+                    <strong>{{ review.client.first_name }} {{ review.client.last_name }}</strong> ({{ review.rating }} / 5)<br>
+                    <small>{{ review.date|date:"d.m.Y" }}</small>
+                    <p>{{ review.text }}</p>
+                </li>
+                {% empty %}
+                <li class="list-group-item">Пока нет отзывов о мастере.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Бронирование -->
+    <div id="booking" class="row mt-4">
+        <h3>Записаться к мастеру</h3>
+        <div class="col-md-12">
+            <form method="post" action="">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="service" class="form-label">Выберите услугу:</label>
+                    <select class="form-select" id="service" name="service" required>
+                        <option value="">Выберите услугу</option>
+                        {% for service in master.services.all %}
+                        <option value="{{ service.id }}">{{ service.name }} ({{ service.formatted_duration }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="datetime" class="form-label">Выберите время:</label>
+                    <input type="datetime-local" class="form-control" id="datetime" name="datetime" required>
+                </div>
+                <button type="submit" class="btn btn-success">Записаться</button>
+            </form>
+        </div>
+    </div>
 </div>
+{% endblock %}

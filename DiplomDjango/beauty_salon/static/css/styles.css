@@ -94,3 +94,96 @@ nav ul li {
 .custom-jumbotron h1, .custom-jumbotron p {
     color: white; /* Белый цвет текста */
 }
+
+/* стилb для слайдера */
+.carousel-inner {
+    text-align: center;
+}
+
+.carousel-item h5 {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.carousel-item p {
+    font-size: 1.1rem;
+    font-style: italic;
+}
+
+.carousel-item .font-italic {
+    font-style: italic;
+    color: gray;
+}
+.carousel-indicators {
+    bottom: -40px;
+
+}
+.carousel-inner {
+    position: relative;
+    width: 70%;
+    overflow: hidden;
+    margin: auto;
+}
+.carousel-indicators [data-bs-target] {
+    background-color: red;
+}
+/* Базовая стилизация для контейнера портфолио */
+.portfolio {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* Стилизация для каждого элемента портфолио */
+.portfolio-item {
+    position: relative;
+    width: 300px; /* Ширина изображения */
+    overflow: hidden;
+}
+
+/* Изображение портфолио */
+.portfolio-image img {
+    width: 100%;
+    height: auto;
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+/* Затемнение и увеличение изображения при наведении */
+.portfolio-item:hover img {
+    transform: scale(1.1); /* Увеличение изображения */
+    filter: brightness(50%); /* Затемнение изображения */
+}
+
+/* Скрытый изначально блок с описанием */
+.portfolio-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6); /* Полупрозрачный чёрный фон */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Отображение описания при наведении */
+.portfolio-item:hover .portfolio-overlay {
+    opacity: 0.8;
+}
+
+/* Дополнительная стилизация текста */
+.portfolio-overlay h5 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.portfolio-overlay p {
+    font-size: 1rem;
+}

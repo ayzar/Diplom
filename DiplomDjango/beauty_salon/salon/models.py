@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from datetime import datetime, time
+from django.utils import timezone
 
 class ServiceCategory(models.Model):
     name = models.CharField(max_length=100)
@@ -8,9 +9,11 @@ class ServiceCategory(models.Model):
     def __str__(self):
         return self.name
 
+
 class Service(models.Model):
     name = models.CharField(max_length=100)
-    category = models.ForeignKey('ServiceCategory', on_delete=models.CASCADE, related_name='services')  # Связь с моделью категории
+    category = models.ForeignKey('ServiceCategory', on_delete=models.CASCADE,
+                                 related_name='services')  # Связь с моделью категории
     duration = models.DurationField()  # Поле для продолжительности
     price = models.DecimalField(max_digits=10, decimal_places=2)  # Цена услуги
 
@@ -30,7 +33,7 @@ class Service(models.Model):
             return f"{int(minutes)} мин"
 
 
-# models.py
+
 class Master(models.Model):
     name = models.CharField(max_length=100)
     specialization = models.CharField(max_length=100, default=" ")  # Специализация
@@ -60,6 +63,7 @@ class Client(models.Model):
     def __str__(self):
         return f"{self.user.username} {self.user.first_name} {self.user.last_name} (Телефон: {self.phone})"
 
+
 class Review(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='reviews')
     master = models.ForeignKey(Master, on_delete=models.CASCADE, related_name='reviews')
@@ -79,14 +83,31 @@ class Portfolio(models.Model):
     def __str__(self):
         return f"Работа мастера {self.master.name}: {self.description}"
 
+
+
+
+
+
 class TimeSlot(models.Model):
-    master = models.ForeignKey(Master, on_delete=models.CASCADE)
+    master = models.ForeignKey('Master', on_delete=models.CASCADE)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     is_available = models.BooleanField(default=True)
 
     def __str__(self):
-        return f'{self.start_time} - {self.end_time} ({self.master.name})'
+        # Преобразуем start_time и end_time в Московскую временную зону
+        moscow_start_time = timezone.localtime(self.start_time)
+        moscow_end_time = timezone.localtime(self.end_time)
+        return f'{moscow_start_time} - {moscow_end_time} ({self.master.name})'
+
+    def is_past(self):
+        # Используем московское время для проверки
+        return self.start_time < timezone.localtime(timezone.now())
+
+    @property
+    def date(self):
+        # Возвращаем только дату из start_time
+        return self.start_time.date()
 
 class Booking(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='bookings')
@@ -100,14 +121,25 @@ class Booking(models.Model):
     ], default='pending')
 
     def is_time_slot_available(self):
-        # Проверяем, занято ли это время другим клиентом
+        # Проверка, занято ли это время другим клиентом
         overlapping_bookings = Booking.objects.filter(
             master=self.master,
             datetime__lt=self.datetime + self.service.duration,
             datetime__gt=self.datetime
         )
+
+        # Проверка рабочего времени
+        start_time = self.datetime.time()
+        end_time = (self.datetime + self.service.duration).time()
+        salon_open_time = time(10, 0)  # 10:00
+        salon_close_time = time(21, 0)  # 21:00
+
+        if not (salon_open_time <= start_time <= salon_close_time):
+            return False  # Начало услуги вне рабочего времени
+        if not (salon_open_time <= end_time <= salon_close_time):
+            return False  # Окончание услуги выходит за пределы рабочего времени
+
         return not overlapping_bookings.exists()
 
     def __str__(self):
         return f"Запись {self.client.user.username} {self.client.user.first_name} {self.client.user.last_name} (Телефон: {self.client.phone}) к мастеру {self.master.name}"
-

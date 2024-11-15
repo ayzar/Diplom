@@ -39,46 +39,56 @@
 <div class="container mt-5 bg-light  py-5">
     <h2 class="mb-4">Наше портфолио</h2>
     <div class="row">
-        {% for portfolio in portfolios %}
-        <div class="col-md-4">
-            <div class="card mb-4">
-                <img src="{{ portfolio.photo.url }}" class="card-img-top" alt="{{ portfolio.description }}">
-                <div class="card-body">
-                    <p class="card-text">{{ portfolio.description }}</p>
-                    <p class="text-muted">Мастер: {{ portfolio.master.name }}</p>
-                </div>
+        <div class="portfolio">
+    {% for portfolio in portfolios %}
+    <div class="portfolio-item">
+        <div class="portfolio-image">
+            <img src="{{ portfolio.photo.url }}" alt="{{ portfolio.title }}">
+            <div class="portfolio-overlay">
+                <h5>{{ portfolio.master.name }}</h5>
+                <p>{{ portfolio.description }}</p>
             </div>
         </div>
-        {% endfor %}
+    </div>
+    {% endfor %}
+</div>
+
     </div>
 </div>
 
 <!-- Секция с отзывами -->
-<div class="container mt-5  py-5">
+<div class="container mt-5 py-5">
     <h2 class="text-center mb-4">Отзывы клиентов</h2>
-    <div id="reviewCarousel" class="carousel slide" data-ride="carousel">
-        <div class="carousel-inner">
+    <div id="reviewCarousel" class="carousel slide" data-bs-ride="carousel">
+        <!-- Индикаторы -->
+        <div class="carousel-indicators mb-3">
             {% for review in reviews %}
-            <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                <div class="d-flex flex-column align-items-center">
-                    <h5>{{ review.master.name }}</h5>
-                    <p class="text-muted">Рейтинг: {{ review.rating }}</p>
-                    <p>{{ review.text }}</p>
-                    <p class="font-italic">{{ review.date|date:"d.m.Y" }}</p>
-                </div>
-            </div>
+                <button type="button" data-bs-target="#reviewCarousel" data-bs-slide-to="{{ forloop.counter0 }}"
+                        class="{% if forloop.first %}active{% endif %}" aria-current="true" aria-label="Slide {{ forloop.counter }}"></button>
             {% endfor %}
         </div>
-        <a class="carousel-control-prev" href="#reviewCarousel" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#reviewCarousel" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>
+
+        <div class="carousel-inner">
+            {% for review in reviews %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <div class="d-flex flex-column align-items-center">
+                        <img src="{{ review.master.photo.url }}" class="rounded-circle" alt="{{ review.master.name }}" width="100" height="100">
+                        <h5>{{ review.master.name }}</h5>
+                        <p class="text-muted">Рейтинг: {{ review.rating }}</p>
+                        <p>{{ review.text }}</p>
+                        <p>{{ review.date|date:"d.m.Y" }} <span>{{ review.client.user.first_name }}</span></p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
     </div>
 </div>
+
+
+    </div>
+</div>
+
 
 <!-- Секция с описанием салона -->
 <div class="container mt-5 bg-light py-5">

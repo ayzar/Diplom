@@ -5,34 +5,45 @@
 {% endblock %}
 
 {% block content %}
-<form id="booking-form">
-    <h3>Выберите категорию:</h3>
-    <div id="categories-list">
-        {% for category in categories %}
-            <label>
-                <input type="radio" name="category" value="{{ category.id }}"> {{ category.name }}
-            </label><br>
-        {% endfor %}
-    </div>
+<div class="container">
+    <form id="booking-form" class="form-group">
+        <h3>Выберите категорию:</h3>
+        <div id="categories-list" class="mb-3">
+            {% for category in categories %}
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="category" value="{{ category.id }}" id="category-{{ category.id }}">
+                    <label class="form-check-label" for="category-{{ category.id }}">
+                        {{ category.name }}
+                    </label>
+                </div>
+            {% endfor %}
+        </div>
 
-    <div id="services-container" style="display:none;">
-        <h3>Выберите услугу:</h3>
-        <div id="services-list"></div>
-    </div>
+        <div id="services-container" class="mb-3" style="display:none;">
+            <h3>Выберите услугу:</h3>
+            <div id="services-list" class="list-group"></div>
+        </div>
 
-    <div id="masters-container" style="display:none;">
-        <h3>Выберите мастера:</h3>
-        <div id="masters-list"></div>
-    </div>
+        <div id="masters-container" class="mb-3" style="display:none;">
+            <h3>Выберите мастера:</h3>
+            <div id="masters-list" class="list-group"></div>
+        </div>
 
-    <div id="time-slots-container" style="display:none;">
-        <h3>Выберите время:</h3>
-        <div id="time-slots-list"></div>
-    </div>
-    <div id="booking-button-container" style="display:none;">
-        <button type="submit" class="btn btn-success">Забронировать</button>
-    </div>
+        <div id="calendar-container" class="mb-3" style="display:none;">
+            <h3>Выберите день:</h3>
+            <div id="date-list" class="list-group"></div>
+        </div>
 
-
-</form>
+        <div id="time-slots-container" class="mb-3" style="display:none;">
+            <h3>Выберите время:</h3>
+            <div id="time-slots-list" class="list-group"></div>
+        </div>
+        <!-- Скрытое поле для ID клиента -->
+        <input type="hidden" id="client-id" name="client_id" value="1">
+        <!-- Кнопка для бронирования -->
+        <div id="booking-button-container" class="text-center" style="display:none;">
+            <button id="booking-button" type="submit" class="btn btn-success">Забронировать</button>
+        </div>
+    </form>
+</div>
 {% endblock %}

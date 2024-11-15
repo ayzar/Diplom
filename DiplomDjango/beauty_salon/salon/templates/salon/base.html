@@ -53,11 +53,17 @@
 <footer class="footer bg-light text-center py-3 mt-5">
     <p>&copy; 2024 Beauty Salon. Все права защищены.</p>
 </footer>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-<!-- Подключение Bootstrap 5 JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="{% static 'js/main.js' %}"></script>
 
+<!-- Подключение jQuery (Обязательно для работы Bootstrap 4/5 с некоторыми компонентами) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Подключение Popper (Нужен для некоторых компонентов Bootstrap) -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+
+<!-- Подключение Bootstrap JS (включает в себя компоненты, такие как модальные окна, слайдеры) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Подключение кастомных скриптов -->
+<script src="{% static 'js/main.js' %}"></script>
 </body>
 </html>
